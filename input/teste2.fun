@@ -1,0 +1,5 @@
+var x = 10;
+
+main {
+    return x;
+}

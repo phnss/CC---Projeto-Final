@@ -1,0 +1,3579 @@
+package ast.command;
+
+import ast.expression.Expression;
+
+public class AssignmentCommand extends Command {
+
+    private final String variable;
+    private final Expression value;
+
+    public AssignmentCommand(
+            String variable,
+            Expression value,
+            int line,
+            int column) {
+
+        super(line, column);
+        this.variable = variable;
+        this.value = value;
+    }
+
+    public String getVariable() {
+        return variable;
+    }
+
+    public Expression getValue() {
+        return value;
+    }
+}
+
+package ast.command;
+
+import ast.ASTNode;
+
+public abstract class Command extends ASTNode {
+
+    protected Command(
+            int line,
+            int column) {
+
+        super(line, column);
+    }
+}
+
+package ast.command;
+
+import ast.expression.Expression;
+import java.util.List;
+
+public class IfCommand extends Command {
+
+    private final Expression condition;
+    private final List<Command> thenCommands;
+    private final List<Command> elseCommands;
+
+    public IfCommand(
+            Expression condition,
+            List<Command> thenCommands,
+            List<Command> elseCommands,
+            int line,
+            int column) {
+
+        super(line, column);
+        this.condition = condition;
+        this.thenCommands = List.copyOf(thenCommands);
+        this.elseCommands = List.copyOf(elseCommands);
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public List<Command> getThenCommands() {
+        return thenCommands;
+    }
+
+    public List<Command> getElseCommands() {
+        return elseCommands;
+    }
+}
+
+package ast.command;
+
+import ast.expression.Expression;
+import java.util.List;
+
+public class WhileCommand extends Command {
+
+    private final Expression condition;
+    private final List<Command> commands;
+
+    public WhileCommand(
+            Expression condition,
+            List<Command> commands,
+            int line,
+            int column) {
+
+        super(line, column);
+        this.condition = condition;
+        this.commands = List.copyOf(commands);
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public List<Command> getCommands() {
+        return commands;
+    }
+}
+
+package ast.declaration;
+
+import ast.command.Command;
+import ast.expression.Expression;
+import java.util.List;
+
+public class FunctionDeclaration extends TopLevelDeclaration {
+
+    private final String name;
+    private final List<String> parameters;
+    private final List<VariableDeclaration> localDeclarations;
+    private final List<Command> commands;
+    private final Expression expression;
+
+    public FunctionDeclaration(
+            String name,
+            List<String> parameters,
+            List<VariableDeclaration> localDeclarations,
+            List<Command> commands,
+            Expression expression,
+            int line,
+            int column) {
+
+        super(line, column);
+        this.name = name;
+        this.parameters = List.copyOf(parameters);
+        this.localDeclarations = List.copyOf(localDeclarations);
+        this.commands = List.copyOf(commands);
+        this.expression = expression;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getParameters() {
+        return parameters;
+    }
+
+    public List<VariableDeclaration> getLocalDeclarations() {
+        return localDeclarations;
+    }
+
+    public List<Command> getCommands() {
+        return commands;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+}
+
+package ast.declaration;
+
+import ast.ASTNode;
+
+public abstract class TopLevelDeclaration extends ASTNode {
+
+    protected TopLevelDeclaration(
+            int line,
+            int column) {
+
+        super(line, column);
+    }
+}
+
+package ast.declaration;
+
+import ast.expression.Expression;
+
+public class VariableDeclaration extends TopLevelDeclaration {
+
+    private final String variable;
+    private final Expression value;
+
+    public VariableDeclaration(
+            String variable,
+            Expression value,
+            int line,
+            int column) {
+
+        super(line, column);
+        this.variable = variable;
+        this.value = value;
+    }
+
+    public String getVariable() {
+        return variable;
+    }
+
+    public Expression getValue() {
+        return value;
+    }
+}
+
+package ast.expression;
+
+public class BinaryExpression extends Expression {
+
+    private final Expression left;
+    private final Expression right;
+    private final String operator;
+
+    public BinaryExpression(
+            Expression left,
+            Expression right,
+            String operator,
+            int line,
+            int column) {
+
+        super(line, column);
+        this.left = left;
+        this.right = right;
+        this.operator = operator;
+    }
+
+    public Expression getLeft() {
+        return left;
+    }
+
+    public Expression getRight() {
+        return right;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+}
+
+package ast.expression;
+
+import ast.ASTNode;
+
+public abstract class Expression extends ASTNode {
+
+    protected Expression(
+            int line,
+            int column) {
+
+        super(line, column);
+    }
+}
+
+package ast.expression;
+
+import java.util.List;
+
+public class FunctionCallExpression extends Expression {
+
+    private final String function;
+    private final List<Expression> arguments;
+
+    public FunctionCallExpression(
+            String function,
+            List<Expression> arguments,
+            int line,
+            int column) {
+
+        super(line, column);
+        this.function = function;
+        this.arguments = List.copyOf(arguments);
+    }
+
+    public String getFunction() {
+        return function;
+    }
+
+    public List<Expression> getArguments() {
+        return arguments;
+    }
+}
+
+package ast.expression;
+
+public class LiteralExpression extends Expression {
+
+    private final long value;
+
+    public LiteralExpression(
+            long value,
+            int line,
+            int column) {
+
+        super(line, column);
+        this.value = value;
+    }
+
+    public long getValue() {
+        return value;
+    }
+}
+
+package ast.expression;
+
+public class VariableExpression extends Expression {
+
+    private final String name;
+
+    public VariableExpression(
+            String name,
+            int line,
+            int column) {
+
+        super(line, column);
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+package ast.printer;
+
+import ast.command.AssignmentCommand;
+import ast.command.Command;
+import ast.command.IfCommand;
+import ast.command.WhileCommand;
+import ast.declaration.FunctionDeclaration;
+import ast.declaration.TopLevelDeclaration;
+import ast.declaration.VariableDeclaration;
+import ast.expression.BinaryExpression;
+import ast.expression.Expression;
+import ast.expression.FunctionCallExpression;
+import ast.expression.LiteralExpression;
+import ast.expression.VariableExpression;
+import ast.program.Program;
+import java.util.List;
+
+public class ASTPrinter {
+
+    public void print(Program program) {
+
+        System.out.println("Program");
+
+        System.out.println("├── Declarações");
+
+        printTopLevelDeclarations(
+                program.getDeclarations(),
+                "│   ");
+
+        System.out.println("└── main");
+
+        System.out.println("    ├── Comandos");
+
+        printCommands(
+                program.getCommands(),
+                "    │   ");
+
+        System.out.println("    └── return");
+
+        printExpression(
+                program.getExpression(),
+                "        ",
+                true);
+    }
+
+    private void printTopLevelDeclarations(
+            List<TopLevelDeclaration> declarations,
+            String prefix) {
+
+        if (declarations.isEmpty()) {
+
+            System.out.println(prefix + "└── <vazio>");
+            return;
+        }
+
+        for (int i = 0; i < declarations.size(); i++) {
+
+            printTopLevelDeclaration(
+                    declarations.get(i),
+                    prefix,
+                    i == declarations.size() - 1);
+        }
+    }
+
+    private void printTopLevelDeclaration(
+            TopLevelDeclaration declaration,
+            String prefix,
+            boolean isLast) {
+
+        if (declaration instanceof VariableDeclaration variableDeclaration) {
+
+            printVariableDeclaration(
+                    variableDeclaration,
+                    prefix,
+                    isLast);
+
+            return;
+        }
+
+        if (declaration instanceof FunctionDeclaration function) {
+
+            printNodePrefix(prefix, isLast);
+
+            System.out.println(
+                    "fun " + function.getName());
+
+            String childPrefix = childPrefix(
+                    prefix,
+                    isLast);
+
+            printParameters(
+                    function.getParameters(),
+                    childPrefix,
+                    false);
+
+            printLocalDeclarations(
+                    function.getLocalDeclarations(),
+                    childPrefix,
+                    false);
+
+            printCommandBlock(
+                    "Comandos",
+                    function.getCommands(),
+                    childPrefix,
+                    false);
+
+            printNamedExpression(
+                    "return",
+                    function.getExpression(),
+                    childPrefix,
+                    true);
+
+            return;
+        }
+
+        throw new IllegalStateException(
+                "Declaração inválida na AST.");
+    }
+
+    private void printVariableDeclaration(
+            VariableDeclaration declaration,
+            String prefix,
+            boolean isLast) {
+
+        printNodePrefix(prefix, isLast);
+
+        System.out.println(
+                "var " + declaration.getVariable() + " =");
+
+        printExpression(
+                declaration.getValue(),
+                childPrefix(prefix, isLast),
+                true);
+    }
+
+    private void printParameters(
+            List<String> parameters,
+            String prefix,
+            boolean isLast) {
+
+        printNodePrefix(prefix, isLast);
+
+        System.out.println("Parâmetros");
+
+        String childPrefix = childPrefix(
+                prefix,
+                isLast);
+
+        if (parameters.isEmpty()) {
+
+            System.out.println(
+                    childPrefix + "└── <vazio>");
+
+            return;
+        }
+
+        for (int i = 0; i < parameters.size(); i++) {
+
+            printNodePrefix(
+                    childPrefix,
+                    i == parameters.size() - 1);
+
+            System.out.println(parameters.get(i));
+        }
+    }
+
+    private void printLocalDeclarations(
+            List<VariableDeclaration> declarations,
+            String prefix,
+            boolean isLast) {
+
+        printNodePrefix(prefix, isLast);
+
+        System.out.println("Variáveis Locais");
+
+        String childPrefix = childPrefix(
+                prefix,
+                isLast);
+
+        if (declarations.isEmpty()) {
+
+            System.out.println(
+                    childPrefix + "└── <vazio>");
+
+            return;
+        }
+
+        for (int i = 0; i < declarations.size(); i++) {
+
+            printVariableDeclaration(
+                    declarations.get(i),
+                    childPrefix,
+                    i == declarations.size() - 1);
+        }
+    }
+
+    private void printCommands(
+            List<Command> commands,
+            String prefix) {
+
+        if (commands.isEmpty()) {
+
+            System.out.println(prefix + "└── <vazio>");
+            return;
+        }
+
+        for (int i = 0; i < commands.size(); i++) {
+
+            printCommand(
+                    commands.get(i),
+                    prefix,
+                    i == commands.size() - 1);
+        }
+    }
+
+    private void printCommand(
+            Command command,
+            String prefix,
+            boolean isLast) {
+
+        if (command instanceof AssignmentCommand assignment) {
+
+            printNodePrefix(prefix, isLast);
+
+            System.out.println(
+                    assignment.getVariable() + " =");
+
+            printExpression(
+                    assignment.getValue(),
+                    childPrefix(prefix, isLast),
+                    true);
+
+            return;
+        }
+
+        if (command instanceof IfCommand ifCommand) {
+
+            printNodePrefix(prefix, isLast);
+
+            System.out.println("if");
+
+            String childPrefix = childPrefix(
+                    prefix,
+                    isLast);
+
+            printNamedExpression(
+                    "Condição",
+                    ifCommand.getCondition(),
+                    childPrefix,
+                    false);
+
+            printCommandBlock(
+                    "Então",
+                    ifCommand.getThenCommands(),
+                    childPrefix,
+                    false);
+
+            printCommandBlock(
+                    "Senão",
+                    ifCommand.getElseCommands(),
+                    childPrefix,
+                    true);
+
+            return;
+        }
+
+        if (command instanceof WhileCommand whileCommand) {
+
+            printNodePrefix(prefix, isLast);
+
+            System.out.println("while");
+
+            String childPrefix = childPrefix(
+                    prefix,
+                    isLast);
+
+            printNamedExpression(
+                    "Condição",
+                    whileCommand.getCondition(),
+                    childPrefix,
+                    false);
+
+            printCommandBlock(
+                    "Corpo",
+                    whileCommand.getCommands(),
+                    childPrefix,
+                    true);
+
+            return;
+        }
+
+        throw new IllegalStateException(
+                "Comando inválido na AST.");
+    }
+
+    private void printNamedExpression(
+            String name,
+            Expression expression,
+            String prefix,
+            boolean isLast) {
+
+        printNodePrefix(prefix, isLast);
+
+        System.out.println(name);
+
+        printExpression(
+                expression,
+                childPrefix(prefix, isLast),
+                true);
+    }
+
+    private void printCommandBlock(
+            String name,
+            List<Command> commands,
+            String prefix,
+            boolean isLast) {
+
+        printNodePrefix(prefix, isLast);
+
+        System.out.println(name);
+
+        printCommands(
+                commands,
+                childPrefix(prefix, isLast));
+    }
+
+    private void printExpression(
+            Expression expression,
+            String prefix,
+            boolean isLast) {
+
+        printNodePrefix(prefix, isLast);
+
+        if (expression instanceof LiteralExpression literal) {
+
+            System.out.println(
+                    literal.getValue());
+
+            return;
+        }
+
+        if (expression instanceof VariableExpression variable) {
+
+            System.out.println(
+                    variable.getName());
+
+            return;
+        }
+
+        if (expression instanceof FunctionCallExpression call) {
+
+            System.out.println(
+                    "call " + call.getFunction());
+
+            String childPrefix = childPrefix(
+                    prefix,
+                    isLast);
+
+            if (call.getArguments().isEmpty()) {
+
+                System.out.println(
+                        childPrefix + "└── <sem argumentos>");
+
+                return;
+            }
+
+            for (int i = 0; i < call.getArguments().size(); i++) {
+
+                printExpression(
+                        call.getArguments().get(i),
+                        childPrefix,
+                        i == call.getArguments().size() - 1);
+            }
+
+            return;
+        }
+
+        if (expression instanceof BinaryExpression binary) {
+
+            System.out.println(
+                    binary.getOperator());
+
+            String childPrefix = childPrefix(
+                    prefix,
+                    isLast);
+
+            printExpression(
+                    binary.getLeft(),
+                    childPrefix,
+                    false);
+
+            printExpression(
+                    binary.getRight(),
+                    childPrefix,
+                    true);
+
+            return;
+        }
+
+        throw new IllegalStateException(
+                "Expressão inválida na AST.");
+    }
+
+    private void printNodePrefix(
+            String prefix,
+            boolean isLast) {
+
+        System.out.print(prefix);
+
+        System.out.print(
+                isLast
+                        ? "└── "
+                        : "├── ");
+    }
+
+    private String childPrefix(
+            String prefix,
+            boolean isLast) {
+
+        return prefix
+                + (isLast
+                        ? "    "
+                        : "│   ");
+    }
+}
+
+package ast;
+
+public abstract class ASTNode {
+
+    private final int line;
+    private final int column;
+
+    protected ASTNode(
+            int line,
+            int column) {
+
+        this.line = line;
+        this.column = column;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+}
+
+package codegen;
+
+import ast.command.AssignmentCommand;
+import ast.command.Command;
+import ast.command.IfCommand;
+import ast.command.WhileCommand;
+import ast.declaration.FunctionDeclaration;
+import ast.declaration.TopLevelDeclaration;
+import ast.declaration.VariableDeclaration;
+import ast.expression.BinaryExpression;
+import ast.expression.Expression;
+import ast.expression.FunctionCallExpression;
+import ast.expression.LiteralExpression;
+import ast.expression.VariableExpression;
+import ast.program.Program;
+import exception.CodeGenerationException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class CodeGenerator {
+
+    private final StringBuilder data = new StringBuilder();
+
+    private final StringBuilder text = new StringBuilder();
+
+    private final StringBuilder functions = new StringBuilder();
+
+    private int labelCounter;
+
+    private Map<String, Integer> frameOffsets = new HashMap<>();
+
+    private boolean insideFunction;
+
+    public String generate(Program program) {
+
+        data.setLength(0);
+        text.setLength(0);
+        functions.setLength(0);
+        labelCounter = 0;
+        frameOffsets = new HashMap<>();
+        insideFunction = false;
+
+        data.append(".section .bss\n");
+
+        for (TopLevelDeclaration declaration
+                : program.getDeclarations()) {
+
+            if (declaration instanceof VariableDeclaration variableDeclaration) {
+
+                data.append(variableDeclaration.getVariable())
+                        .append(": .zero 8\n");
+            }
+        }
+
+        text.append(".section .text\n");
+        text.append(".globl _start\n");
+        text.append("_start:\n");
+
+        for (TopLevelDeclaration declaration
+                : program.getDeclarations()) {
+
+            if (declaration instanceof VariableDeclaration variableDeclaration) {
+
+                generateExpression(
+                        variableDeclaration.getValue(),
+                        text);
+
+                generateVariableWrite(
+                        variableDeclaration.getVariable(),
+                        text);
+            }
+        }
+
+        generateCommands(
+                program.getCommands(),
+                text);
+
+        generateExpression(
+                program.getExpression(),
+                text);
+
+        text.append("call imprime_num\n");
+        text.append("call sair\n");
+
+        for (TopLevelDeclaration declaration
+                : program.getDeclarations()) {
+
+            if (declaration instanceof FunctionDeclaration function) {
+
+                generateFunction(function);
+            }
+        }
+
+        text.append(functions);
+        text.append(".include \"runtime.s\"\n");
+
+        return data.toString()
+                + "\n"
+                + text.toString();
+    }
+
+    private void generateFunction(
+            FunctionDeclaration function) {
+
+        int localBytes
+                = function.getLocalDeclarations().size() * 8;
+
+        Map<String, Integer> previousOffsets = frameOffsets;
+        boolean previousInsideFunction = insideFunction;
+
+        frameOffsets = new HashMap<>();
+        insideFunction = true;
+
+        for (int i = 0;
+                i < function.getLocalDeclarations().size();
+                i++) {
+
+            frameOffsets.put(
+                    function.getLocalDeclarations()
+                            .get(i)
+                            .getVariable(),
+                    i * 8);
+        }
+
+        for (int i = 0;
+                i < function.getParameters().size();
+                i++) {
+
+            frameOffsets.put(
+                    function.getParameters().get(i),
+                    localBytes + 16 + i * 8);
+        }
+
+        functions.append("\n")
+                .append(function.getName())
+                .append(":\n");
+
+        functions.append("push %rbp\n");
+
+        if (localBytes > 0) {
+
+            functions.append("sub $")
+                    .append(localBytes)
+                    .append(", %rsp\n");
+        }
+
+        functions.append("mov %rsp, %rbp\n");
+
+        for (VariableDeclaration declaration
+                : function.getLocalDeclarations()) {
+
+            generateExpression(
+                    declaration.getValue(),
+                    functions);
+
+            generateVariableWrite(
+                    declaration.getVariable(),
+                    functions);
+        }
+
+        generateCommands(
+                function.getCommands(),
+                functions);
+
+        generateExpression(
+                function.getExpression(),
+                functions);
+
+        if (localBytes > 0) {
+
+            functions.append("add $")
+                    .append(localBytes)
+                    .append(", %rsp\n");
+        }
+
+        functions.append("pop %rbp\n");
+        functions.append("ret\n");
+
+        frameOffsets = previousOffsets;
+        insideFunction = previousInsideFunction;
+    }
+
+    private void generateCommands(
+            List<Command> commands,
+            StringBuilder output) {
+
+        for (Command command : commands) {
+
+            generateCommand(command, output);
+        }
+    }
+
+    private void generateCommand(
+            Command command,
+            StringBuilder output) {
+
+        if (command instanceof AssignmentCommand assignment) {
+
+            generateExpression(
+                    assignment.getValue(),
+                    output);
+
+            generateVariableWrite(
+                    assignment.getVariable(),
+                    output);
+
+            return;
+        }
+
+        if (command instanceof IfCommand ifCommand) {
+
+            int label = labelCounter++;
+
+            String falseLabel = "Lfalso" + label;
+            String endLabel = "Lfim" + label;
+
+            generateExpression(
+                    ifCommand.getCondition(),
+                    output);
+
+            output.append("cmp $0, %rax\n");
+            output.append("jz ")
+                    .append(falseLabel)
+                    .append("\n");
+
+            generateCommands(
+                    ifCommand.getThenCommands(),
+                    output);
+
+            output.append("jmp ")
+                    .append(endLabel)
+                    .append("\n");
+
+            output.append(falseLabel)
+                    .append(":\n");
+
+            generateCommands(
+                    ifCommand.getElseCommands(),
+                    output);
+
+            output.append(endLabel)
+                    .append(":\n");
+
+            return;
+        }
+
+        if (command instanceof WhileCommand whileCommand) {
+
+            int label = labelCounter++;
+
+            String startLabel = "Linicio" + label;
+            String endLabel = "Lfim" + label;
+
+            output.append(startLabel)
+                    .append(":\n");
+
+            generateExpression(
+                    whileCommand.getCondition(),
+                    output);
+
+            output.append("cmp $0, %rax\n");
+            output.append("jz ")
+                    .append(endLabel)
+                    .append("\n");
+
+            generateCommands(
+                    whileCommand.getCommands(),
+                    output);
+
+            output.append("jmp ")
+                    .append(startLabel)
+                    .append("\n");
+
+            output.append(endLabel)
+                    .append(":\n");
+
+            return;
+        }
+
+        throw new CodeGenerationException(
+                "Comando inválido na AST.",
+                command.getLine(),
+                command.getColumn());
+    }
+
+    private void generateExpression(
+            Expression expression,
+            StringBuilder output) {
+
+        if (expression instanceof LiteralExpression literal) {
+
+            output.append("mov $")
+                    .append(literal.getValue())
+                    .append(", %rax\n");
+
+            return;
+        }
+
+        if (expression instanceof VariableExpression variable) {
+
+            generateVariableRead(
+                    variable.getName(),
+                    output);
+
+            return;
+        }
+
+        if (expression instanceof FunctionCallExpression call) {
+
+            generateFunctionCall(call, output);
+
+            return;
+        }
+
+        if (expression instanceof BinaryExpression binary) {
+
+            generateExpression(
+                    binary.getRight(),
+                    output);
+
+            output.append("push %rax\n");
+
+            generateExpression(
+                    binary.getLeft(),
+                    output);
+
+            output.append("pop %rbx\n");
+
+            switch (binary.getOperator()) {
+
+                case "+" ->
+                    output.append("add %rbx, %rax\n");
+
+                case "-" ->
+                    output.append("sub %rbx, %rax\n");
+
+                case "*" ->
+                    output.append("imul %rbx, %rax\n");
+
+                case "/" -> {
+
+                    output.append("cqto\n");
+                    output.append("idiv %rbx\n");
+                }
+
+                case "==" ->
+                    generateComparison(
+                            "setz",
+                            output);
+
+                case "<" ->
+                    generateComparison(
+                            "setl",
+                            output);
+
+                case ">" ->
+                    generateComparison(
+                            "setg",
+                            output);
+
+                default -> throw new CodeGenerationException(
+                        "Operador '"
+                                + binary.getOperator()
+                                + "' inválido.",
+                        binary.getLine(),
+                        binary.getColumn());
+            }
+
+            return;
+        }
+
+        throw new CodeGenerationException(
+                "Expressão inválida na AST.",
+                expression.getLine(),
+                expression.getColumn());
+    }
+
+    private void generateFunctionCall(
+            FunctionCallExpression call,
+            StringBuilder output) {
+
+        for (int i = call.getArguments().size() - 1;
+                i >= 0;
+                i--) {
+
+            generateExpression(
+                    call.getArguments().get(i),
+                    output);
+
+            output.append("push %rax\n");
+        }
+
+        output.append("call ")
+                .append(call.getFunction())
+                .append("\n");
+
+        int parameterBytes
+                = call.getArguments().size() * 8;
+
+        if (parameterBytes > 0) {
+
+            output.append("add $")
+                    .append(parameterBytes)
+                    .append(", %rsp\n");
+        }
+    }
+
+    private void generateVariableRead(
+            String variable,
+            StringBuilder output) {
+
+        Integer offset = frameOffsets.get(variable);
+
+        if (insideFunction && offset != null) {
+
+            output.append("mov ")
+                    .append(offset)
+                    .append("(%rbp), %rax\n");
+
+            return;
+        }
+
+        output.append("mov ")
+                .append(variable)
+                .append("(%rip), %rax\n");
+    }
+
+    private void generateVariableWrite(
+            String variable,
+            StringBuilder output) {
+
+        Integer offset = frameOffsets.get(variable);
+
+        if (insideFunction && offset != null) {
+
+            output.append("mov %rax, ")
+                    .append(offset)
+                    .append("(%rbp)\n");
+
+            return;
+        }
+
+        output.append("mov %rax, ")
+                .append(variable)
+                .append("(%rip)\n");
+    }
+
+    private void generateComparison(
+            String instruction,
+            StringBuilder output) {
+
+        output.append("xor %rcx, %rcx\n");
+        output.append("cmp %rbx, %rax\n");
+        output.append(instruction)
+                .append(" %cl\n");
+        output.append("mov %rcx, %rax\n");
+    }
+}
+
+package exception;
+
+public class CodeGenerationException extends CompilerException {
+
+    private static final long serialVersionUID = 1L;
+
+    public CodeGenerationException(
+            String message,
+            int line,
+            int column) {
+
+        super(
+                "de geração de código",
+                message,
+                line,
+                column);
+    }
+}
+
+package exception;
+
+public abstract class CompilerException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+
+    private final String phase;
+    private final int line;
+    private final int column;
+
+    protected CompilerException(
+            String phase,
+            String message,
+            int line,
+            int column) {
+
+        super(message);
+        this.phase = phase;
+        this.line = line;
+        this.column = column;
+    }
+
+    public String getPhase() {
+        return phase;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    @Override
+    public String getMessage() {
+
+        if (line > 0 && column > 0) {
+
+            return "Erro "
+                    + phase
+                    + " na linha "
+                    + line
+                    + ", coluna "
+                    + column
+                    + ": "
+                    + super.getMessage();
+        }
+
+        return "Erro "
+                + phase
+                + ": "
+                + super.getMessage();
+    }
+}
+
+package exception;
+
+public class InterpreterException extends CompilerException {
+
+    private static final long serialVersionUID = 1L;
+
+    public InterpreterException(
+            String message,
+            int line,
+            int column) {
+
+        super(
+                "de interpretação",
+                message,
+                line,
+                column);
+    }
+}
+
+package exception;
+
+public class LexicalException extends CompilerException {
+
+    private static final long serialVersionUID = 1L;
+
+    public LexicalException(
+            String message,
+            int line,
+            int column) {
+
+        super(
+                "léxico",
+                message,
+                line,
+                column);
+    }
+}
+
+package exception;
+
+public class ParserException extends CompilerException {
+
+    private static final long serialVersionUID = 1L;
+
+    public ParserException(
+            String message,
+            int line,
+            int column) {
+
+        super(
+                "sintático",
+                message,
+                line,
+                column);
+    }
+}
+
+package exception;
+
+public class SemanticException extends CompilerException {
+
+    private static final long serialVersionUID = 1L;
+
+    public SemanticException(
+            String message,
+            int line,
+            int column) {
+
+        super(
+                "semântico",
+                message,
+                line,
+                column);
+    }
+}
+
+package interpreter;
+
+import ast.command.AssignmentCommand;
+import ast.command.Command;
+import ast.command.IfCommand;
+import ast.command.WhileCommand;
+import ast.declaration.FunctionDeclaration;
+import ast.declaration.TopLevelDeclaration;
+import ast.declaration.VariableDeclaration;
+import ast.expression.BinaryExpression;
+import ast.expression.Expression;
+import ast.expression.FunctionCallExpression;
+import ast.expression.LiteralExpression;
+import ast.expression.VariableExpression;
+import ast.program.Program;
+import exception.InterpreterException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Interpreter {
+
+    private final RuntimeEnvironment environment
+            = new RuntimeEnvironment();
+
+    public long evaluate(Program program) {
+
+        environment.clear();
+
+        for (TopLevelDeclaration declaration
+                : program.getDeclarations()) {
+
+            processTopLevelDeclaration(declaration);
+        }
+
+        executeCommands(
+                program.getCommands());
+
+        return evaluateExpression(
+                program.getExpression());
+    }
+
+    private void processTopLevelDeclaration(
+            TopLevelDeclaration declaration) {
+
+        if (declaration instanceof VariableDeclaration variableDeclaration) {
+
+            long value = evaluateExpression(
+                    variableDeclaration.getValue());
+
+            environment.declareGlobalVariable(
+                    variableDeclaration.getVariable(),
+                    value);
+
+            return;
+        }
+
+        if (declaration instanceof FunctionDeclaration function) {
+
+            environment.declareFunction(
+                    function.getName(),
+                    function);
+
+            return;
+        }
+
+        throw new InterpreterException(
+                "Declaração inválida na AST.",
+                declaration.getLine(),
+                declaration.getColumn());
+    }
+
+    private void executeCommands(
+            List<Command> commands) {
+
+        for (Command command : commands) {
+
+            executeCommand(command);
+        }
+    }
+
+    private void executeCommand(Command command) {
+
+        if (command instanceof AssignmentCommand assignment) {
+
+            long value = evaluateExpression(
+                    assignment.getValue());
+
+            environment.set(
+                    assignment.getVariable(),
+                    value,
+                    assignment.getLine(),
+                    assignment.getColumn());
+
+            return;
+        }
+
+        if (command instanceof IfCommand ifCommand) {
+
+            long condition = evaluateExpression(
+                    ifCommand.getCondition());
+
+            if (condition != 0) {
+
+                executeCommands(
+                        ifCommand.getThenCommands());
+
+            } else {
+
+                executeCommands(
+                        ifCommand.getElseCommands());
+            }
+
+            return;
+        }
+
+        if (command instanceof WhileCommand whileCommand) {
+
+            while (evaluateExpression(
+                    whileCommand.getCondition()) != 0) {
+
+                executeCommands(
+                        whileCommand.getCommands());
+            }
+
+            return;
+        }
+
+        throw new InterpreterException(
+                "Comando inválido na AST.",
+                command.getLine(),
+                command.getColumn());
+    }
+
+    private long evaluateExpression(Expression expression) {
+
+        if (expression instanceof LiteralExpression literal) {
+
+            return literal.getValue();
+        }
+
+        if (expression instanceof VariableExpression variable) {
+
+            return environment.get(
+                    variable.getName(),
+                    variable.getLine(),
+                    variable.getColumn());
+        }
+
+        if (expression instanceof FunctionCallExpression call) {
+
+            return evaluateFunctionCall(call);
+        }
+
+        if (expression instanceof BinaryExpression binary) {
+
+            /*
+             * Mantém a mesma ordem utilizada pelo gerador:
+             * primeiro o lado direito e depois o esquerdo.
+             */
+            long right = evaluateExpression(
+                    binary.getRight());
+
+            long left = evaluateExpression(
+                    binary.getLeft());
+
+            if (binary.getOperator().equals("/")
+                    && right == 0) {
+
+                throw new InterpreterException(
+                        "Divisão por zero.",
+                        binary.getLine(),
+                        binary.getColumn());
+            }
+
+            return switch (binary.getOperator()) {
+
+                case "+" -> left + right;
+
+                case "-" -> left - right;
+
+                case "*" -> left * right;
+
+                case "/" -> left / right;
+
+                case "<" -> left < right ? 1 : 0;
+
+                case ">" -> left > right ? 1 : 0;
+
+                case "==" -> left == right ? 1 : 0;
+
+                default -> throw new InterpreterException(
+                        "Operador '"
+                                + binary.getOperator()
+                                + "' inválido.",
+                        binary.getLine(),
+                        binary.getColumn());
+            };
+        }
+
+        throw new InterpreterException(
+                "Expressão inválida na AST.",
+                expression.getLine(),
+                expression.getColumn());
+    }
+
+    private long evaluateFunctionCall(
+            FunctionCallExpression call) {
+
+        FunctionDeclaration function = environment.getFunction(
+                call.getFunction(),
+                call.getLine(),
+                call.getColumn());
+
+        int expected = function.getParameters().size();
+        int received = call.getArguments().size();
+
+        if (expected != received) {
+
+            throw new InterpreterException(
+                    "Função '"
+                            + call.getFunction()
+                            + "' esperava "
+                            + expected
+                            + " argumento(s), mas recebeu "
+                            + received
+                            + ".",
+                    call.getLine(),
+                    call.getColumn());
+        }
+
+        List<Long> argumentValues = new ArrayList<>();
+
+        for (int i = 0; i < received; i++) {
+            argumentValues.add(0L);
+        }
+
+        /*
+         * Avaliação em ordem inversa, acompanhando a convenção
+         * adotada pelo gerador de código.
+         */
+        for (int i = received - 1; i >= 0; i--) {
+
+            long value = evaluateExpression(
+                    call.getArguments().get(i));
+
+            argumentValues.set(i, value);
+        }
+
+        environment.enterLocalScope();
+
+        try {
+
+            for (int i = 0; i < expected; i++) {
+
+                environment.declareLocalVariable(
+                        function.getParameters().get(i),
+                        argumentValues.get(i),
+                        call.getLine(),
+                        call.getColumn());
+            }
+
+            for (VariableDeclaration declaration
+                    : function.getLocalDeclarations()) {
+
+                long value = evaluateExpression(
+                        declaration.getValue());
+
+                environment.declareLocalVariable(
+                        declaration.getVariable(),
+                        value,
+                        declaration.getLine(),
+                        declaration.getColumn());
+            }
+
+            executeCommands(
+                    function.getCommands());
+
+            return evaluateExpression(
+                    function.getExpression());
+
+        } finally {
+
+            environment.exitLocalScope();
+        }
+    }
+}
+
+package interpreter;
+
+import ast.declaration.FunctionDeclaration;
+import exception.InterpreterException;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+
+public class RuntimeEnvironment {
+
+    private final Map<String, Long> globalVariables = new HashMap<>();
+
+    private final Map<String, FunctionDeclaration> functions = new HashMap<>();
+
+    private final Deque<Map<String, Long>> localScopes = new ArrayDeque<>();
+
+    public void declareGlobalVariable(
+            String name,
+            long value) {
+
+        globalVariables.put(name, value);
+    }
+
+    public void declareFunction(
+            String name,
+            FunctionDeclaration declaration) {
+
+        functions.put(name, declaration);
+    }
+
+    public void enterLocalScope() {
+
+        localScopes.push(
+                new HashMap<>());
+    }
+
+    public void exitLocalScope() {
+
+        if (localScopes.isEmpty()) {
+
+            throw new InterpreterException(
+                    "Nenhum escopo local está ativo.",
+                    0,
+                    0);
+        }
+
+        localScopes.pop();
+    }
+
+    public void declareLocalVariable(
+            String name,
+            long value,
+            int line,
+            int column) {
+
+        currentLocalScope(line, column)
+                .put(name, value);
+    }
+
+    public long get(
+            String name,
+            int line,
+            int column) {
+
+        if (!localScopes.isEmpty()
+                && localScopes.peek().containsKey(name)) {
+
+            return localScopes.peek().get(name);
+        }
+
+        if (globalVariables.containsKey(name)) {
+
+            return globalVariables.get(name);
+        }
+
+        throw new InterpreterException(
+                "Variável '"
+                        + name
+                        + "' não declarada.",
+                line,
+                column);
+    }
+
+    public void set(
+            String name,
+            long value,
+            int line,
+            int column) {
+
+        if (!localScopes.isEmpty()
+                && localScopes.peek().containsKey(name)) {
+
+            localScopes.peek().put(name, value);
+            return;
+        }
+
+        if (globalVariables.containsKey(name)) {
+
+            globalVariables.put(name, value);
+            return;
+        }
+
+        throw new InterpreterException(
+                "Variável '"
+                        + name
+                        + "' não declarada.",
+                line,
+                column);
+    }
+
+    public FunctionDeclaration getFunction(
+            String name,
+            int line,
+            int column) {
+
+        FunctionDeclaration function = functions.get(name);
+
+        if (function == null) {
+
+            throw new InterpreterException(
+                    "Função '"
+                            + name
+                            + "' não declarada.",
+                    line,
+                    column);
+        }
+
+        return function;
+    }
+
+    public void clear() {
+
+        globalVariables.clear();
+        functions.clear();
+        localScopes.clear();
+    }
+
+    private Map<String, Long> currentLocalScope(
+            int line,
+            int column) {
+
+        if (localScopes.isEmpty()) {
+
+            throw new InterpreterException(
+                    "Nenhum escopo local está ativo.",
+                    line,
+                    column);
+        }
+
+        return localScopes.peek();
+    }
+}
+
+package lexer;
+
+import exception.LexicalException;
+import java.util.ArrayList;
+import java.util.List;
+import model.Token;
+import model.TokenType;
+
+public class Lexer {
+
+    private final String input;
+
+    private int position;
+    private int line;
+    private int column;
+
+    private final List<LexicalException> errors;
+
+    public Lexer(String input) {
+
+        this.input = input;
+        this.position = 0;
+        this.line = 1;
+        this.column = 1;
+        this.errors = new ArrayList<>();
+    }
+
+    public List<Token> tokenize() {
+
+        List<Token> tokens = new ArrayList<>();
+
+        while (!isAtEnd()) {
+
+            char current = currentChar();
+
+            if (Character.isWhitespace(current)) {
+
+                advance();
+                continue;
+            }
+
+            if (Character.isDigit(current)) {
+
+                tokenizeNumber(tokens);
+                continue;
+            }
+
+            if (Character.isLetter(current)) {
+
+                tokenizeIdentifier(tokens);
+                continue;
+            }
+
+            tokenizeSymbol(tokens);
+        }
+
+        tokens.add(new Token(
+                TokenType.EOF,
+                "",
+                position,
+                line,
+                column));
+
+        return tokens;
+    }
+
+    private void tokenizeNumber(
+            List<Token> tokens) {
+
+        int startPosition = position;
+        int startLine = line;
+        int startColumn = column;
+
+        StringBuilder lexeme = new StringBuilder();
+
+        while (!isAtEnd()
+                && Character.isDigit(currentChar())) {
+
+            lexeme.append(advance());
+        }
+
+        if (!isAtEnd()
+                && Character.isLetter(currentChar())) {
+
+            while (!isAtEnd()
+                    && Character.isLetterOrDigit(currentChar())) {
+
+                lexeme.append(advance());
+            }
+
+            tokens.add(new Token(
+                    TokenType.ERRO,
+                    lexeme.toString(),
+                    startPosition,
+                    startLine,
+                    startColumn));
+
+            errors.add(new LexicalException(
+                    "Identificador iniciado por número.",
+                    startLine,
+                    startColumn));
+
+            return;
+        }
+
+        tokens.add(new Token(
+                TokenType.NUMERO,
+                lexeme.toString(),
+                startPosition,
+                startLine,
+                startColumn));
+    }
+
+    private void tokenizeIdentifier(
+            List<Token> tokens) {
+
+        int startPosition = position;
+        int startLine = line;
+        int startColumn = column;
+
+        StringBuilder lexeme = new StringBuilder();
+
+        while (!isAtEnd()
+                && Character.isLetterOrDigit(currentChar())) {
+
+            lexeme.append(advance());
+        }
+
+        String value = lexeme.toString();
+
+        tokens.add(new Token(
+                keywordType(value),
+                value,
+                startPosition,
+                startLine,
+                startColumn));
+    }
+
+    private void tokenizeSymbol(
+            List<Token> tokens) {
+
+        int startPosition = position;
+        int startLine = line;
+        int startColumn = column;
+
+        char current = currentChar();
+
+        switch (current) {
+
+            case '+' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.SOMA,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case '-' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.SUB,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case '*' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.MULT,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case '/' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.DIV,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case '<' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.MENOR,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case '>' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.MAIOR,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case ';' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.PONTO_VIRGULA,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case ',' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.VIRGULA,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case '(' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.PAREN_ESQ,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case ')' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.PAREN_DIR,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case '{' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.CHAVE_ESQ,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case '}' -> addSingleCharacterToken(
+                    tokens,
+                    TokenType.CHAVE_DIR,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            case '=' -> tokenizeEquals(
+                    tokens,
+                    startPosition,
+                    startLine,
+                    startColumn);
+
+            default -> {
+
+                advance();
+
+                tokens.add(new Token(
+                        TokenType.ERRO,
+                        String.valueOf(current),
+                        startPosition,
+                        startLine,
+                        startColumn));
+
+                errors.add(new LexicalException(
+                        "Caractere inválido '"
+                                + current
+                                + "'.",
+                        startLine,
+                        startColumn));
+            }
+        }
+    }
+
+    private void tokenizeEquals(
+            List<Token> tokens,
+            int startPosition,
+            int startLine,
+            int startColumn) {
+
+        advance();
+
+        if (!isAtEnd() && currentChar() == '=') {
+
+            advance();
+
+            tokens.add(new Token(
+                    TokenType.IGUALDADE,
+                    "==",
+                    startPosition,
+                    startLine,
+                    startColumn));
+
+            return;
+        }
+
+        tokens.add(new Token(
+                TokenType.ATRIB,
+                "=",
+                startPosition,
+                startLine,
+                startColumn));
+    }
+
+    private void addSingleCharacterToken(
+            List<Token> tokens,
+            TokenType type,
+            int startPosition,
+            int startLine,
+            int startColumn) {
+
+        String lexeme = String.valueOf(advance());
+
+        tokens.add(new Token(
+                type,
+                lexeme,
+                startPosition,
+                startLine,
+                startColumn));
+    }
+
+    private TokenType keywordType(String lexeme) {
+
+        return switch (lexeme) {
+
+            case "if" -> TokenType.IF;
+
+            case "else" -> TokenType.ELSE;
+
+            case "while" -> TokenType.WHILE;
+
+            case "return" -> TokenType.RETURN;
+
+            case "fun" -> TokenType.FUN;
+
+            case "var" -> TokenType.VAR;
+
+            case "main" -> TokenType.MAIN;
+
+            default -> TokenType.IDENTIFICADOR;
+        };
+    }
+
+    private char currentChar() {
+        return input.charAt(position);
+    }
+
+    private char advance() {
+
+        char current = input.charAt(position);
+
+        position++;
+
+        if (current == '\n') {
+
+            line++;
+            column = 1;
+
+        } else {
+
+            column++;
+        }
+
+        return current;
+    }
+
+    private boolean isAtEnd() {
+        return position >= input.length();
+    }
+
+    public List<LexicalException> getErrors() {
+        return List.copyOf(errors);
+    }
+
+    public boolean hasErrors() {
+        return !errors.isEmpty();
+    }
+}
+
+package main;
+
+import ast.printer.ASTPrinter;
+import ast.program.Program;
+import codegen.CodeGenerator;
+import exception.CompilerException;
+import exception.LexicalException;
+import interpreter.Interpreter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Scanner;
+import lexer.Lexer;
+import model.Token;
+import parser.Parser;
+import semantic.SemanticAnalyzer;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+
+            System.out.println("==============================");
+            System.out.println("      COMPILADOR FUN");
+            System.out.println("==============================");
+
+            String fileName;
+
+            if (args.length > 0) {
+
+                fileName = args[0];
+
+                System.out.println(
+                        "Arquivo: " + fileName);
+
+            } else {
+
+                System.out.print(
+                        "Informe o nome do arquivo: ");
+
+                fileName = scanner.nextLine();
+            }
+
+            Path inputFile = Path.of(
+                    "../../input",
+                    fileName);
+
+            String source = Files.readString(
+                    inputFile);
+
+            Lexer lexer = new Lexer(source);
+
+            List<Token> tokens = lexer.tokenize();
+
+            System.out.println("\n===== TOKENS =====");
+
+            tokens.forEach(System.out::println);
+
+            if (lexer.hasErrors()) {
+
+                System.out.println(
+                        "\n===== ERROS LÉXICOS =====");
+
+                for (LexicalException error : lexer.getErrors()) {
+
+                    System.out.println(
+                            error.getMessage());
+                }
+
+                return;
+            }
+
+            Parser parser = new Parser(tokens);
+
+            Program program = parser.parse();
+
+            System.out.println("\n===== AST =====");
+
+            ASTPrinter printer = new ASTPrinter();
+
+            printer.print(program);
+
+            SemanticAnalyzer analyzer = new SemanticAnalyzer();
+
+            analyzer.analyze(program);
+
+            Interpreter interpreter = new Interpreter();
+
+            long result = interpreter.evaluate(program);
+
+            System.out.println(
+                    "\nResultado = " + result);
+
+            CodeGenerator generator = new CodeGenerator();
+
+            String assembly = generator.generate(program);
+
+            String outputName = fileName.replaceFirst(
+                    "\\.[^.]+$",
+                    "");
+
+            Path output = Path.of(
+                    "../../output",
+                    outputName + ".s");
+
+            Files.createDirectories(
+                    output.getParent());
+
+            Files.writeString(
+                    output,
+                    assembly);
+
+            System.out.println(
+                    "\nAssembly salvo em:");
+
+            System.out.println(
+                    output.toAbsolutePath());
+
+        } catch (IOException exception) {
+
+            System.out.println(
+                    "Erro de entrada/saída: "
+                            + exception.getMessage());
+
+        } catch (CompilerException exception) {
+
+            System.out.println(
+                    exception.getMessage());
+
+        } catch (RuntimeException exception) {
+
+            System.out.println(
+                    "Erro interno do compilador: "
+                            + exception.getMessage());
+
+        } finally {
+
+            scanner.close();
+        }
+    }
+}
+
+package model;
+
+public class Token {
+
+    private final TokenType type;
+    private final String lexeme;
+    private final int position;
+    private final int line;
+    private final int column;
+
+    public Token(
+            TokenType type,
+            String lexeme,
+            int position,
+            int line,
+            int column) {
+
+        this.type = type;
+        this.lexeme = lexeme;
+        this.position = position;
+        this.line = line;
+        this.column = column;
+    }
+
+    public TokenType getType() {
+        return type;
+    }
+
+    public String getLexeme() {
+        return lexeme;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    @Override
+    public String toString() {
+
+        return "<"
+                + type
+                + ", \""
+                + lexeme
+                + "\", posição "
+                + position
+                + ", linha "
+                + line
+                + ", coluna "
+                + column
+                + ">";
+    }
+}
+
+package model;
+
+public enum TokenType {
+    NUMERO,
+    IDENTIFICADOR,
+
+    SOMA,
+    SUB,
+    MULT,
+    DIV,
+
+    MENOR,
+    MAIOR,
+    IGUALDADE,
+
+    ATRIB,
+    PONTO_VIRGULA,
+    VIRGULA,
+
+    PAREN_ESQ,
+    PAREN_DIR,
+    CHAVE_ESQ,
+    CHAVE_DIR,
+
+    IF,
+    ELSE,
+    WHILE,
+    RETURN,
+    FUN,
+    VAR,
+    MAIN,
+
+    ERRO,
+    EOF
+}
+
+package parser;
+
+import ast.command.AssignmentCommand;
+import ast.command.Command;
+import ast.command.IfCommand;
+import ast.command.WhileCommand;
+import ast.declaration.FunctionDeclaration;
+import ast.declaration.TopLevelDeclaration;
+import ast.declaration.VariableDeclaration;
+import ast.expression.BinaryExpression;
+import ast.expression.Expression;
+import ast.expression.FunctionCallExpression;
+import ast.expression.LiteralExpression;
+import ast.expression.VariableExpression;
+import ast.program.Program;
+import exception.ParserException;
+import java.util.ArrayList;
+import java.util.List;
+import model.Token;
+import model.TokenType;
+
+public class Parser {
+
+    private final List<Token> tokens;
+
+    private int current = 0;
+
+    public Parser(List<Token> tokens) {
+        this.tokens = tokens;
+    }
+
+    // programa ::= decl* 'main' '{' cmd* 'return' exp ';' '}' EOF
+
+    public Program parse() {
+
+        List<TopLevelDeclaration> declarations = new ArrayList<>();
+
+        while (check(TokenType.VAR)
+                || check(TokenType.FUN)) {
+
+            declarations.add(
+                    parseTopLevelDeclaration());
+        }
+
+        Token mainToken = consume(TokenType.MAIN);
+
+        consume(TokenType.CHAVE_ESQ);
+
+        List<Command> commands = new ArrayList<>();
+
+        while (!check(TokenType.RETURN)) {
+
+            ensureNotAtEnd(
+                    "Esperado 'return' no bloco principal.");
+
+            if (check(TokenType.CHAVE_DIR)) {
+
+                throw error(
+                        currentToken(),
+                        "Esperado 'return' antes de '}'.");
+            }
+
+            commands.add(
+                    parseCommand());
+        }
+
+        consume(TokenType.RETURN);
+
+        Expression expression = parseExpression();
+
+        consume(TokenType.PONTO_VIRGULA);
+        consume(TokenType.CHAVE_DIR);
+        consume(TokenType.EOF);
+
+        return new Program(
+                declarations,
+                commands,
+                expression,
+                mainToken.getLine(),
+                mainToken.getColumn());
+    }
+
+    // decl ::= vardecl | fundecl
+
+    private TopLevelDeclaration parseTopLevelDeclaration() {
+
+        return switch (currentToken().getType()) {
+
+            case VAR -> parseVariableDeclaration();
+
+            case FUN -> parseFunctionDeclaration();
+
+            default -> throw error(
+                    currentToken(),
+                    "Declaração esperada.");
+        };
+    }
+
+    // vardecl ::= 'var' IDENTIFICADOR '=' exp ';'
+
+    private VariableDeclaration parseVariableDeclaration() {
+
+        Token varToken = consume(TokenType.VAR);
+        Token identifier = consume(TokenType.IDENTIFICADOR);
+
+        consume(TokenType.ATRIB);
+
+        Expression value = parseExpression();
+
+        consume(TokenType.PONTO_VIRGULA);
+
+        return new VariableDeclaration(
+                identifier.getLexeme(),
+                value,
+                varToken.getLine(),
+                varToken.getColumn());
+    }
+
+    // fundecl ::= 'fun' IDENTIFICADOR '(' arglist? ')'
+    //             '{' vardecl* cmd* 'return' exp ';' '}'
+
+    private FunctionDeclaration parseFunctionDeclaration() {
+
+        Token funToken = consume(TokenType.FUN);
+        Token identifier = consume(TokenType.IDENTIFICADOR);
+
+        consume(TokenType.PAREN_ESQ);
+
+        List<String> parameters = parseFormalParameters();
+
+        consume(TokenType.PAREN_DIR);
+        consume(TokenType.CHAVE_ESQ);
+
+        List<VariableDeclaration> localDeclarations = new ArrayList<>();
+
+        while (check(TokenType.VAR)) {
+
+            localDeclarations.add(
+                    parseVariableDeclaration());
+        }
+
+        List<Command> commands = new ArrayList<>();
+
+        while (!check(TokenType.RETURN)) {
+
+            ensureNotAtEnd(
+                    "Esperado 'return' na função '"
+                            + identifier.getLexeme()
+                            + "'.");
+
+            if (check(TokenType.CHAVE_DIR)) {
+
+                throw error(
+                        currentToken(),
+                        "Esperado 'return' antes do fim da função '"
+                                + identifier.getLexeme()
+                                + "'.");
+            }
+
+            commands.add(
+                    parseCommand());
+        }
+
+        consume(TokenType.RETURN);
+
+        Expression expression = parseExpression();
+
+        consume(TokenType.PONTO_VIRGULA);
+        consume(TokenType.CHAVE_DIR);
+
+        return new FunctionDeclaration(
+                identifier.getLexeme(),
+                parameters,
+                localDeclarations,
+                commands,
+                expression,
+                funToken.getLine(),
+                funToken.getColumn());
+    }
+
+    // arglist ::= IDENTIFICADOR (',' IDENTIFICADOR)*
+
+    private List<String> parseFormalParameters() {
+
+        List<String> parameters = new ArrayList<>();
+
+        if (check(TokenType.PAREN_DIR)) {
+            return parameters;
+        }
+
+        parameters.add(
+                consume(TokenType.IDENTIFICADOR)
+                        .getLexeme());
+
+        while (match(TokenType.VIRGULA)) {
+
+            parameters.add(
+                    consume(TokenType.IDENTIFICADOR)
+                            .getLexeme());
+        }
+
+        return parameters;
+    }
+
+    // cmd ::= if | while | atrib
+
+    private Command parseCommand() {
+
+        return switch (currentToken().getType()) {
+
+            case IF -> parseIf();
+
+            case WHILE -> parseWhile();
+
+            case IDENTIFICADOR -> parseAssignment();
+
+            default -> throw error(
+                    currentToken(),
+                    "Comando esperado.");
+        };
+    }
+
+    // if ::= 'if' exp '{' cmd* '}' 'else' '{' cmd* '}'
+
+    private IfCommand parseIf() {
+
+        Token ifToken = consume(TokenType.IF);
+
+        Expression condition = parseExpression();
+
+        consume(TokenType.CHAVE_ESQ);
+
+        List<Command> thenCommands = parseCommandBlock();
+
+        consume(TokenType.CHAVE_DIR);
+        consume(TokenType.ELSE);
+        consume(TokenType.CHAVE_ESQ);
+
+        List<Command> elseCommands = parseCommandBlock();
+
+        consume(TokenType.CHAVE_DIR);
+
+        return new IfCommand(
+                condition,
+                thenCommands,
+                elseCommands,
+                ifToken.getLine(),
+                ifToken.getColumn());
+    }
+
+    // while ::= 'while' exp '{' cmd* '}'
+
+    private WhileCommand parseWhile() {
+
+        Token whileToken = consume(TokenType.WHILE);
+
+        Expression condition = parseExpression();
+
+        consume(TokenType.CHAVE_ESQ);
+
+        List<Command> commands = parseCommandBlock();
+
+        consume(TokenType.CHAVE_DIR);
+
+        return new WhileCommand(
+                condition,
+                commands,
+                whileToken.getLine(),
+                whileToken.getColumn());
+    }
+
+    // atrib ::= IDENTIFICADOR '=' exp ';'
+
+    private AssignmentCommand parseAssignment() {
+
+        Token identifier = consume(TokenType.IDENTIFICADOR);
+
+        consume(TokenType.ATRIB);
+
+        Expression value = parseExpression();
+
+        consume(TokenType.PONTO_VIRGULA);
+
+        return new AssignmentCommand(
+                identifier.getLexeme(),
+                value,
+                identifier.getLine(),
+                identifier.getColumn());
+    }
+
+    private List<Command> parseCommandBlock() {
+
+        List<Command> commands = new ArrayList<>();
+
+        while (!check(TokenType.CHAVE_DIR)) {
+
+            ensureNotAtEnd(
+                    "Esperado '}' para encerrar o bloco de comandos.");
+
+            if (check(TokenType.RETURN)) {
+
+                throw error(
+                        currentToken(),
+                        "'return' somente pode aparecer no final de 'main' ou de uma função.");
+            }
+
+            commands.add(
+                    parseCommand());
+        }
+
+        return commands;
+    }
+
+    // exp ::= exp_a (('<' | '>' | '==') exp_a)*
+
+    private Expression parseExpression() {
+
+        Expression left = parseAdditive();
+
+        while (check(TokenType.MENOR)
+                || check(TokenType.MAIOR)
+                || check(TokenType.IGUALDADE)) {
+
+            Token operator = advance();
+
+            Expression right = parseAdditive();
+
+            left = new BinaryExpression(
+                    left,
+                    right,
+                    operator.getLexeme(),
+                    operator.getLine(),
+                    operator.getColumn());
+        }
+
+        return left;
+    }
+
+    // exp_a ::= exp_m (('+' | '-') exp_m)*
+
+    private Expression parseAdditive() {
+
+        Expression left = parseMultiplicative();
+
+        while (check(TokenType.SOMA)
+                || check(TokenType.SUB)) {
+
+            Token operator = advance();
+
+            Expression right = parseMultiplicative();
+
+            left = new BinaryExpression(
+                    left,
+                    right,
+                    operator.getLexeme(),
+                    operator.getLine(),
+                    operator.getColumn());
+        }
+
+        return left;
+    }
+
+    // exp_m ::= prim (('*' | '/') prim)*
+
+    private Expression parseMultiplicative() {
+
+        Expression left = parsePrimary();
+
+        while (check(TokenType.MULT)
+                || check(TokenType.DIV)) {
+
+            Token operator = advance();
+
+            Expression right = parsePrimary();
+
+            left = new BinaryExpression(
+                    left,
+                    right,
+                    operator.getLexeme(),
+                    operator.getLine(),
+                    operator.getColumn());
+        }
+
+        return left;
+    }
+
+    // prim ::= NUMERO | IDENTIFICADOR | '(' exp ')' | chamada
+
+    private Expression parsePrimary() {
+
+        if (check(TokenType.NUMERO)) {
+
+            Token number = advance();
+
+            try {
+
+                return new LiteralExpression(
+                        Long.parseLong(number.getLexeme()),
+                        number.getLine(),
+                        number.getColumn());
+
+            } catch (NumberFormatException exception) {
+
+                throw error(
+                        number,
+                        "Número inteiro fora do intervalo de 'long'.");
+            }
+        }
+
+        if (check(TokenType.IDENTIFICADOR)) {
+
+            Token identifier = advance();
+
+            if (check(TokenType.PAREN_ESQ)) {
+
+                return parseFunctionCall(identifier);
+            }
+
+            return new VariableExpression(
+                    identifier.getLexeme(),
+                    identifier.getLine(),
+                    identifier.getColumn());
+        }
+
+        if (match(TokenType.PAREN_ESQ)) {
+
+            Expression expression = parseExpression();
+
+            consume(TokenType.PAREN_DIR);
+
+            return expression;
+        }
+
+        throw error(
+                currentToken(),
+                "Expressão esperada.");
+    }
+
+    // fun ::= IDENTIFICADOR '(' params? ')'
+
+    private FunctionCallExpression parseFunctionCall(
+            Token identifier) {
+
+        consume(TokenType.PAREN_ESQ);
+
+        List<Expression> arguments = parseRealParameters();
+
+        consume(TokenType.PAREN_DIR);
+
+        return new FunctionCallExpression(
+                identifier.getLexeme(),
+                arguments,
+                identifier.getLine(),
+                identifier.getColumn());
+    }
+
+    // params ::= exp (',' exp)*
+
+    private List<Expression> parseRealParameters() {
+
+        List<Expression> arguments = new ArrayList<>();
+
+        if (check(TokenType.PAREN_DIR)) {
+            return arguments;
+        }
+
+        arguments.add(
+                parseExpression());
+
+        while (match(TokenType.VIRGULA)) {
+
+            arguments.add(
+                    parseExpression());
+        }
+
+        return arguments;
+    }
+
+    private Token consume(TokenType expected) {
+
+        if (!check(expected)) {
+
+            throw error(
+                    currentToken(),
+                    "Esperado "
+                            + tokenDescription(expected)
+                            + " mas encontrado "
+                            + tokenDescription(currentToken().getType())
+                            + ".");
+        }
+
+        return advance();
+    }
+
+    private boolean match(TokenType type) {
+
+        if (!check(type)) {
+            return false;
+        }
+
+        advance();
+        return true;
+    }
+
+    private boolean check(TokenType type) {
+        return currentToken().getType() == type;
+    }
+
+    private Token currentToken() {
+        return tokens.get(current);
+    }
+
+    private Token advance() {
+
+        Token token = currentToken();
+
+        if (current < tokens.size() - 1) {
+            current++;
+        }
+
+        return token;
+    }
+
+    private void ensureNotAtEnd(String message) {
+
+        if (check(TokenType.EOF)) {
+
+            throw error(
+                    currentToken(),
+                    message);
+        }
+    }
+
+    private ParserException error(
+            Token token,
+            String message) {
+
+        return new ParserException(
+                message,
+                token.getLine(),
+                token.getColumn());
+    }
+
+    private String tokenDescription(TokenType type) {
+
+        return switch (type) {
+
+            case PONTO_VIRGULA -> "';'";
+            case VIRGULA -> "','";
+            case PAREN_ESQ -> "'('";
+            case PAREN_DIR -> "')'";
+            case CHAVE_ESQ -> "'{'";
+            case CHAVE_DIR -> "'}'";
+            case ATRIB -> "'='";
+            case IGUALDADE -> "'=='";
+            case SOMA -> "'+'";
+            case SUB -> "'-'";
+            case MULT -> "'*'";
+            case DIV -> "'/'";
+            case MENOR -> "'<'";
+            case MAIOR -> "'>'";
+            case IF -> "'if'";
+            case ELSE -> "'else'";
+            case WHILE -> "'while'";
+            case RETURN -> "'return'";
+            case FUN -> "'fun'";
+            case VAR -> "'var'";
+            case MAIN -> "'main'";
+            case IDENTIFICADOR -> "um identificador";
+            case NUMERO -> "um número";
+            case EOF -> "fim do arquivo";
+            case ERRO -> "um token inválido";
+        };
+    }
+}
+
+package semantic;
+
+import ast.command.AssignmentCommand;
+import ast.command.Command;
+import ast.command.IfCommand;
+import ast.command.WhileCommand;
+import ast.declaration.FunctionDeclaration;
+import ast.declaration.TopLevelDeclaration;
+import ast.declaration.VariableDeclaration;
+import ast.expression.BinaryExpression;
+import ast.expression.Expression;
+import ast.expression.FunctionCallExpression;
+import ast.expression.LiteralExpression;
+import ast.expression.VariableExpression;
+import ast.program.Program;
+import exception.SemanticException;
+import java.util.List;
+import symbol.Symbol;
+import symbol.SymbolKind;
+import symbol.SymbolTable;
+
+public class SemanticAnalyzer {
+
+    private final SymbolTable table = new SymbolTable();
+
+    private FunctionDeclaration currentFunction;
+
+    public void analyze(Program program) {
+
+        table.clear();
+        currentFunction = null;
+
+        for (TopLevelDeclaration declaration
+                : program.getDeclarations()) {
+
+            analyzeTopLevelDeclaration(declaration);
+        }
+
+        analyzeCommands(
+                program.getCommands());
+
+        analyzeExpression(
+                program.getExpression());
+    }
+
+    private void analyzeTopLevelDeclaration(
+            TopLevelDeclaration declaration) {
+
+        if (declaration instanceof VariableDeclaration variableDeclaration) {
+
+            analyzeGlobalVariableDeclaration(
+                    variableDeclaration);
+
+            return;
+        }
+
+        if (declaration instanceof FunctionDeclaration function) {
+
+            analyzeFunctionDeclaration(function);
+
+            return;
+        }
+
+        throw new SemanticException(
+                "Declaração inválida na AST.",
+                declaration.getLine(),
+                declaration.getColumn());
+    }
+
+    private void analyzeGlobalVariableDeclaration(
+            VariableDeclaration declaration) {
+
+        if (table.existsGlobal(
+                declaration.getVariable())) {
+
+            Symbol symbol = table.getGlobalSymbol(
+                    declaration.getVariable());
+
+            if (symbol.getKind()
+                    == SymbolKind.GLOBAL_VARIABLE) {
+
+                throw new SemanticException(
+                        "Variável '"
+                                + declaration.getVariable()
+                                + "' já foi declarada.",
+                        declaration.getLine(),
+                        declaration.getColumn());
+            }
+
+            throw new SemanticException(
+                    "Identificador '"
+                            + declaration.getVariable()
+                            + "' já foi declarado como função.",
+                    declaration.getLine(),
+                    declaration.getColumn());
+        }
+
+        analyzeExpression(
+                declaration.getValue());
+
+        table.declareGlobalVariable(
+                declaration.getVariable());
+    }
+
+    private void analyzeFunctionDeclaration(
+            FunctionDeclaration function) {
+
+        if (table.existsGlobal(
+                function.getName())) {
+
+            throw new SemanticException(
+                    "Identificador '"
+                            + function.getName()
+                            + "' já foi declarado.",
+                    function.getLine(),
+                    function.getColumn());
+        }
+
+        /*
+         * A função é inserida antes da análise de seu corpo.
+         * Isso permite chamadas diretamente recursivas.
+         */
+        table.declareFunction(
+                function.getName(),
+                function.getParameters().size(),
+                function);
+
+        table.enterLocalScope();
+        currentFunction = function;
+
+        try {
+
+            for (String parameter : function.getParameters()) {
+
+                ensureLocalNameAvailable(
+                        parameter,
+                        function.getLine(),
+                        function.getColumn());
+
+                table.declareParameter(parameter);
+            }
+
+            for (VariableDeclaration declaration
+                    : function.getLocalDeclarations()) {
+
+                ensureLocalNameAvailable(
+                        declaration.getVariable(),
+                        declaration.getLine(),
+                        declaration.getColumn());
+
+                /*
+                 * O inicializador é analisado antes da variável
+                 * ser inserida no escopo local.
+                 */
+                analyzeExpression(
+                        declaration.getValue());
+
+                table.declareLocalVariable(
+                        declaration.getVariable());
+            }
+
+            analyzeCommands(
+                    function.getCommands());
+
+            analyzeExpression(
+                    function.getExpression());
+
+        } finally {
+
+            table.exitLocalScope();
+            currentFunction = null;
+        }
+    }
+
+    private void ensureLocalNameAvailable(
+            String name,
+            int line,
+            int column) {
+
+        if (table.existsInCurrentLocalScope(name)) {
+
+            throw new SemanticException(
+                    "Variável local '"
+                            + name
+                            + "' já foi declarada na função '"
+                            + currentFunction.getName()
+                            + "'.",
+                    line,
+                    column);
+        }
+    }
+
+    private void analyzeCommands(
+            List<Command> commands) {
+
+        for (Command command : commands) {
+
+            analyzeCommand(command);
+        }
+    }
+
+    private void analyzeCommand(Command command) {
+
+        if (command instanceof AssignmentCommand assignment) {
+
+            analyzeVariableReference(
+                    assignment.getVariable(),
+                    assignment.getLine(),
+                    assignment.getColumn());
+
+            analyzeExpression(
+                    assignment.getValue());
+
+            return;
+        }
+
+        if (command instanceof IfCommand ifCommand) {
+
+            analyzeExpression(
+                    ifCommand.getCondition());
+
+            analyzeCommands(
+                    ifCommand.getThenCommands());
+
+            analyzeCommands(
+                    ifCommand.getElseCommands());
+
+            return;
+        }
+
+        if (command instanceof WhileCommand whileCommand) {
+
+            analyzeExpression(
+                    whileCommand.getCondition());
+
+            analyzeCommands(
+                    whileCommand.getCommands());
+
+            return;
+        }
+
+        throw new SemanticException(
+                "Comando inválido na AST.",
+                command.getLine(),
+                command.getColumn());
+    }
+
+    private void analyzeExpression(Expression expression) {
+
+        if (expression instanceof LiteralExpression) {
+            return;
+        }
+
+        if (expression instanceof VariableExpression variable) {
+
+            analyzeVariableReference(
+                    variable.getName(),
+                    variable.getLine(),
+                    variable.getColumn());
+
+            return;
+        }
+
+        if (expression instanceof FunctionCallExpression call) {
+
+            analyzeFunctionCall(call);
+
+            return;
+        }
+
+        if (expression instanceof BinaryExpression binary) {
+
+            analyzeExpression(
+                    binary.getLeft());
+
+            analyzeExpression(
+                    binary.getRight());
+
+            return;
+        }
+
+        throw new SemanticException(
+                "Expressão inválida na AST.",
+                expression.getLine(),
+                expression.getColumn());
+    }
+
+    private void analyzeVariableReference(
+            String name,
+            int line,
+            int column) {
+
+        Symbol symbol = table.resolveSymbol(name);
+
+        if (symbol == null) {
+
+            throw new SemanticException(
+                    "Variável '"
+                            + name
+                            + "' não declarada.",
+                    line,
+                    column);
+        }
+
+        if (!symbol.isVariable()) {
+
+            throw new SemanticException(
+                    "Identificador '"
+                            + name
+                            + "' não representa uma variável.",
+                    line,
+                    column);
+        }
+    }
+
+    private void analyzeFunctionCall(
+            FunctionCallExpression call) {
+
+        /*
+         * Funções somente podem ser globais.
+         */
+        Symbol symbol = table.getGlobalSymbol(
+                call.getFunction());
+
+        if (symbol == null) {
+
+            throw new SemanticException(
+                    "Função '"
+                            + call.getFunction()
+                            + "' não declarada.",
+                    call.getLine(),
+                    call.getColumn());
+        }
+
+        if (symbol.getKind() != SymbolKind.FUNCTION) {
+
+            throw new SemanticException(
+                    "Identificador '"
+                            + call.getFunction()
+                            + "' não representa uma função.",
+                    call.getLine(),
+                    call.getColumn());
+        }
+
+        int expected = symbol.getParameterCount();
+        int received = call.getArguments().size();
+
+        if (expected != received) {
+
+            throw new SemanticException(
+                    "Função '"
+                            + call.getFunction()
+                            + "' esperava "
+                            + expected
+                            + " argumento(s), mas recebeu "
+                            + received
+                            + ".",
+                    call.getLine(),
+                    call.getColumn());
+        }
+
+        for (Expression argument : call.getArguments()) {
+
+            analyzeExpression(argument);
+        }
+    }
+
+    public SymbolTable getSymbolTable() {
+        return table;
+    }
+}
+
+package symbol;
+
+import ast.declaration.FunctionDeclaration;
+
+public class Symbol {
+
+    private final String name;
+    private final SymbolKind kind;
+    private final int parameterCount;
+    private final FunctionDeclaration functionDeclaration;
+
+    private Symbol(
+            String name,
+            SymbolKind kind,
+            int parameterCount,
+            FunctionDeclaration functionDeclaration) {
+
+        this.name = name;
+        this.kind = kind;
+        this.parameterCount = parameterCount;
+        this.functionDeclaration = functionDeclaration;
+    }
+
+    public static Symbol variable(
+            String name,
+            SymbolKind kind) {
+
+        return new Symbol(
+                name,
+                kind,
+                0,
+                null);
+    }
+
+    public static Symbol function(
+            String name,
+            int parameterCount,
+            FunctionDeclaration functionDeclaration) {
+
+        return new Symbol(
+                name,
+                SymbolKind.FUNCTION,
+                parameterCount,
+                functionDeclaration);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public SymbolKind getKind() {
+        return kind;
+    }
+
+    public int getParameterCount() {
+        return parameterCount;
+    }
+
+    public FunctionDeclaration getFunctionDeclaration() {
+        return functionDeclaration;
+    }
+
+    public boolean isVariable() {
+
+        return kind == SymbolKind.GLOBAL_VARIABLE
+                || kind == SymbolKind.LOCAL_VARIABLE
+                || kind == SymbolKind.PARAMETER;
+    }
+}
+
+package symbol;
+
+public enum SymbolKind {
+    GLOBAL_VARIABLE,
+    FUNCTION,
+    LOCAL_VARIABLE,
+    PARAMETER
+}
+
+
+package symbol;
+
+import ast.declaration.FunctionDeclaration;
+import exception.SemanticException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class SymbolTable {
+
+    private final Map<String, Symbol> globalSymbols = new HashMap<>();
+
+    private Map<String, Symbol> localSymbols;
+
+    public void declareGlobalVariable(String name) {
+
+        globalSymbols.put(
+                name,
+                Symbol.variable(
+                        name,
+                        SymbolKind.GLOBAL_VARIABLE));
+    }
+
+    public void declareFunction(
+            String name,
+            int parameterCount,
+            FunctionDeclaration declaration) {
+
+        globalSymbols.put(
+                name,
+                Symbol.function(
+                        name,
+                        parameterCount,
+                        declaration));
+    }
+
+    public void enterLocalScope() {
+
+        localSymbols = new HashMap<>();
+    }
+
+    public void exitLocalScope() {
+
+        localSymbols = null;
+    }
+
+    public boolean hasLocalScope() {
+        return localSymbols != null;
+    }
+
+    public void declareLocalVariable(String name) {
+
+        requireLocalScope();
+
+        localSymbols.put(
+                name,
+                Symbol.variable(
+                        name,
+                        SymbolKind.LOCAL_VARIABLE));
+    }
+
+    public void declareParameter(String name) {
+
+        requireLocalScope();
+
+        localSymbols.put(
+                name,
+                Symbol.variable(
+                        name,
+                        SymbolKind.PARAMETER));
+    }
+
+    public boolean existsGlobal(String name) {
+
+        return globalSymbols.containsKey(name);
+    }
+
+    public boolean existsInCurrentLocalScope(
+            String name) {
+
+        return hasLocalScope()
+                && localSymbols.containsKey(name);
+    }
+
+    public Symbol getGlobalSymbol(String name) {
+
+        return globalSymbols.get(name);
+    }
+
+    public Symbol resolveSymbol(String name) {
+
+        if (hasLocalScope()) {
+
+            Symbol local = localSymbols.get(name);
+
+            if (local != null) {
+                return local;
+            }
+        }
+
+        return globalSymbols.get(name);
+    }
+
+    public void clear() {
+
+        globalSymbols.clear();
+        localSymbols = null;
+    }
+
+    private void requireLocalScope() {
+
+        if (!hasLocalScope()) {
+
+            throw new SemanticException(
+                    "Nenhum escopo local está ativo.",
+                    0,
+                    0);
+        }
+    }
+}

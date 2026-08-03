@@ -1,0 +1,52 @@
+package model;
+
+public enum TokenType {
+    NUMERO,
+    IDENTIFICADOR,
+
+    SOMA,
+    SUB,
+    MULT,
+    DIV,
+    RESTO,
+    INCREMENTO,
+    DECREMENTO,
+
+    DESLOCAMENTO_ESQ,
+    DESLOCAMENTO_DIR,
+
+    SOMA_ATRIB,
+    SUB_ATRIB,
+    MULT_ATRIB,
+    DIV_ATRIB,
+    RESTO_ATRIB,
+    DESLOCAMENTO_ESQ_ATRIB,
+    DESLOCAMENTO_DIR_ATRIB,
+
+    MENOR,
+    MAIOR,
+    MENOR_IGUAL,
+    MAIOR_IGUAL,
+    IGUALDADE,
+    DIFERENTE,
+
+    ATRIB,
+    PONTO_VIRGULA,
+    VIRGULA,
+
+    PAREN_ESQ,
+    PAREN_DIR,
+    CHAVE_ESQ,
+    CHAVE_DIR,
+
+    IF,
+    ELSE,
+    WHILE,
+    RETURN,
+    FUN,
+    VAR,
+    MAIN,
+
+    ERRO,
+    EOF
+}
